@@ -1,7 +1,6 @@
-package counter
+package counter1
 
 import (
-	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
@@ -17,14 +16,7 @@ func Flush2broker(resetDuration uint64, FlushCb func()) {
 		for {
 			time.Sleep(time.Duration(resetDuration) * time.Millisecond)
 			FlushCb()
-			syncMap.Range(func(key, value any) bool {
-				v1, loaded := syncMap.LoadAndDelete(key)
-				if loaded {
-					v := v1.(*uint64)
-					fmt.Println(key, *v)
-				}
-				return true
-			})
+			syncMap = sync.Map{}
 		}
 	}()
 }
